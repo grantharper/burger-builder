@@ -82,40 +82,43 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = () => {
-    // alert('You continue!');
-    this.setState({
-      loading: true
-    });
-    const order = {
-      ingredients: this.state.ingredients,
-      totalPrice: this.state.totalPrice,
-      customer: {
-        name: 'Grant',
-        address: {
-          street: 'fake street',
-          zipCode: '97653',
-          country: 'Wakanda'
-        },
-        email: 'test@test.com'
-      },
-      deliveryMethod: 'bike'
-    };
+    console.log(this.props);
+    this.props.history.push("/checkout");
 
-    //simulate latency with setTimeout
-    setTimeout(() => {axios.post('/orders.json', order)
-    .then(response => {
-      console.log(response);
-      this.setState({
-        purchasing: false,
-        loading: false
-      });
-    }).catch(error => {
-      console.log(error);
-      this.setState({
-        purchasing: false,
-        loading: false
-      });
-    })}, 2000);
+    // alert('You continue!');
+    // this.setState({
+    //   loading: true
+    // });
+    // const order = {
+    //   ingredients: this.state.ingredients,
+    //   totalPrice: this.state.totalPrice,
+    //   customer: {
+    //     name: 'Grant',
+    //     address: {
+    //       street: 'fake street',
+    //       zipCode: '97653',
+    //       country: 'Wakanda'
+    //     },
+    //     email: 'test@test.com'
+    //   },
+    //   deliveryMethod: 'bike'
+    // };
+    //
+    // //simulate latency with setTimeout
+    // setTimeout(() => {axios.post('/orders.json', order)
+    // .then(response => {
+    //   console.log(response);
+    //   this.setState({
+    //     purchasing: false,
+    //     loading: false
+    //   });
+    // }).catch(error => {
+    //   console.log(error);
+    //   this.setState({
+    //     purchasing: false,
+    //     loading: false
+    //   });
+    // })}, 2000);
 
   };
 

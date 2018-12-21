@@ -5,15 +5,62 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import classes from './ContactData.css';
 import axios from '../../../axios-orders';
 import Aux from '../../../hoc/Aux/Aux';
+import Input from '../../../components/UI/Input/Input';
 
 class ContactData extends Component {
 
   state = {
-    name: '',
-    email: '',
-    address: {
-      street: '',
-      postalCode: ''
+    orderForm: {
+      name: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Name'
+        },
+        value: ''
+      },
+      street: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Street'
+        },
+        value: ''
+      },
+      zipCode: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Zip Code'
+        },
+        value: ''
+      },
+      country: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Country'
+        },
+        value: ''
+      },
+      email: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'email',
+          placeholder: 'Email'
+        },
+        value: ''
+      },
+      deliveryMethod: {
+        elementType: 'select',
+        elementConfig: {
+          options: [
+          {value: 'fastest', displayValue: 'Fastest'},
+          {value: 'cheapest', displayValue: 'Cheapest'}
+          ]
+        },
+        value: ''
+      }
     },
     loading: false
   };
@@ -60,14 +107,23 @@ class ContactData extends Component {
   };
 
   render() {
+    let inputElements = [];
+    for(let orderElement in this.state.orderForm){
+      let element = {
+        ...this.state.orderForm[orderElement],
+      };
+      element.elementConfig.name = orderElement;
+
+      inputElements.push(<Input elementType={element.elementType} elementConfig={element.elementConfig} value={element.value}/>);
+    }
+
+
     let displayOutput = (
     <Aux>
       <h4>Enter your contact data</h4>
       <form>
-        <input className={classes.Input} type="text" name="name" placeholder="Your name"/>
-        <input className={classes.Input} type="email" name="email" placeholder="Email"/>
-        <input className={classes.Input} type="text" name="street" placeholder="Street"/>
-        <input className={classes.Input} type="text" name="postalCode" placeholder="Postal Code"/>
+        {inputElements}
+        {/*<Input elementType="..." elementConfig="..." value="..."/>*/}
         <Button btnType="Success" clicked={this.orderHandler}>Order</Button>
       </form>
     </Aux>

@@ -114,7 +114,7 @@ class ContactData extends Component {
       };
       element.elementConfig.name = orderElement;
 
-      inputElements.push(<Input elementType={element.elementType} elementConfig={element.elementConfig} value={element.value}/>);
+      inputElements.push(<Input key={orderElement} elementType={element.elementType} elementConfig={element.elementConfig} value={element.value}/>);
     }
 
 
@@ -123,7 +123,6 @@ class ContactData extends Component {
       <h4>Enter your contact data</h4>
       <form>
         {inputElements}
-        {/*<Input elementType="..." elementConfig="..." value="..."/>*/}
         <Button btnType="Success" clicked={this.orderHandler}>Order</Button>
       </form>
     </Aux>

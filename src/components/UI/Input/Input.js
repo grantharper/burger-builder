@@ -19,9 +19,9 @@ const input = (props) => {
       break;
     case('select'):
       let options = props.elementConfig.options.map((option) => {
-        return <option key={option.value} value={option.value} onChange={props.changed}>{option.displayValue}</option>;
+        return <option key={option.value} value={option.value}>{option.displayValue}</option>;
       });
-      inputElement = (<select value={props.value} className={inputClasses.join(' ')}>{options}</select>);
+      inputElement = (<select onChange={props.changed} value={props.value} className={inputClasses.join(' ')}>{options}</select>);
       break;
     default:
       inputElement = <input className={inputClasses.join(' ')} {...props.elementConfig} value={props.value} onChange={props.changed}/>;

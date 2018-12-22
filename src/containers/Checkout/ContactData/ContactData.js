@@ -72,19 +72,15 @@ class ContactData extends Component {
     this.setState({
       loading: true
     });
+    const formData = {};
+    for(let formElementId in this.state.orderForm){
+      formData[formElementId] = this.state.orderForm[formElementId].value;
+    }
+
     const order = {
       ingredients: this.props.ingredients,
       totalPrice: this.props.price,
-      customer: {
-        name: 'Grant',
-        address: {
-          street: 'fake street',
-          zipCode: '97653',
-          country: 'Wakanda'
-        },
-        email: 'test@test.com'
-      },
-      deliveryMethod: 'bike'
+      orderData: formData
     };
 
     //simulate latency with setTimeout
@@ -106,6 +102,16 @@ class ContactData extends Component {
     // }, 2000);
   };
 
+  inputChangedHandler = (event, formElementId) => {
+    const updatedOrderForm = {
+      ...this.state.orderForm
+    };
+    const updatedFormElement = {...updatedOrderForm[formElementId]};
+    updatedFormElement.value = event.target.value;
+    updatedOrderForm[formElementId] = updatedFormElement;
+    this.setState({orderForm: updatedOrderForm});
+  };
+
   render() {
     let inputElements = [];
     for(let orderElement in this.state.orderForm){
@@ -114,16 +120,16 @@ class ContactData extends Component {
       };
       element.elementConfig.name = orderElement;
 
-      inputElements.push(<Input key={orderElement} elementType={element.elementType} elementConfig={element.elementConfig} value={element.value}/>);
+      inputElements.push(<Input changed={(event) => this.inputChangedHandler(event, orderElement)} key={orderElement} elementType={element.elementType} elementConfig={element.elementConfig} value={element.value}/>);
     }
 
 
     let displayOutput = (
     <Aux>
       <h4>Enter your contact data</h4>
-      <form>
+      <form onSubmit={this.orderHandler}>
         {inputElements}
-        <Button btnType="Success" clicked={this.orderHandler}>Order</Button>
+        <Button btnType="Success">Order</Button>
       </form>
     </Aux>
 

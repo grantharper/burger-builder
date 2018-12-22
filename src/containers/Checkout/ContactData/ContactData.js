@@ -21,7 +21,8 @@ class ContactData extends Component {
         validation: {
           required: true
         },
-        valid: false
+        valid: false,
+        touched: false
       },
       street: {
         elementType: 'input',
@@ -33,7 +34,8 @@ class ContactData extends Component {
         validation: {
           required: true
         },
-        valid: false
+        valid: false,
+        touched: false
       },
       zipCode: {
         elementType: 'input',
@@ -47,7 +49,8 @@ class ContactData extends Component {
           minLength: 5,
           maxLength: 5
         },
-        valid: false
+        valid: false,
+        touched: false
       },
       country: {
         elementType: 'input',
@@ -59,7 +62,8 @@ class ContactData extends Component {
         validation: {
           required: true
         },
-        valid: false
+        valid: false,
+        touched: false
       },
       email: {
         elementType: 'input',
@@ -71,7 +75,8 @@ class ContactData extends Component {
         validation: {
           required: true
         },
-        valid: false
+        valid: false,
+        touched: false
       },
       deliveryMethod: {
         elementType: 'select',
@@ -149,6 +154,7 @@ class ContactData extends Component {
     const updatedFormElement = {...updatedOrderForm[formElementId]};
     updatedFormElement.value = event.target.value;
     updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
+    updatedFormElement.touched = true;
     updatedOrderForm[formElementId] = updatedFormElement;
     console.log(updatedFormElement);
     this.setState({orderForm: updatedOrderForm});
@@ -162,7 +168,15 @@ class ContactData extends Component {
       };
       element.elementConfig.name = orderElement;
 
-      inputElements.push(<Input invalid={!this.state.orderForm[orderElement].valid} changed={(event) => this.inputChangedHandler(event, orderElement)} key={orderElement} elementType={element.elementType} elementConfig={element.elementConfig} value={element.value}/>);
+      inputElements.push(<Input
+      shouldValidate={this.state.orderForm[orderElement].validation}
+      invalid={!this.state.orderForm[orderElement].valid}
+      touched={this.state.orderForm[orderElement].touched}
+      changed={(event) => this.inputChangedHandler(event, orderElement)}
+      key={orderElement}
+      elementType={element.elementType}
+      elementConfig={element.elementConfig}
+      value={element.value}/>);
     }
 
 

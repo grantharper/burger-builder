@@ -1,4 +1,4 @@
-import * as actionTypes from './actionTypes';
+import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
   ingredients: {
@@ -26,7 +26,7 @@ function calculateTotalPrice(ingredients) {
   return totalPrice;
 }
 
-const reducer = (state = initialState, action) => {
+const burgerBuilder = (state = initialState, action) => {
 
   let updatedState = {...state};
 
@@ -56,4 +56,4 @@ const reducer = (state = initialState, action) => {
   return updatedState;
 };
 
-export default reducer;
+export default burgerBuilder;

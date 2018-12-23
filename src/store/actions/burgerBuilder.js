@@ -18,7 +18,13 @@ export const removeIngredient = (ingredientName) => {
 export const setIngredients = (ingredients) => {
   return {
     type: actionsTypes.SET_INGREDIENTS,
-    ingredients: ingredients
+    // hard code the order of the ingredients on the burger
+    ingredients: {
+      salad: ingredients.salad,
+      bacon: ingredients.bacon,
+      cheese: ingredients.cheese,
+      meat: ingredients.meat
+    }
   }
 };
 

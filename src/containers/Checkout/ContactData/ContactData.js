@@ -7,6 +7,9 @@ import axios from '../../../axios-orders';
 import Aux from '../../../hoc/Aux/Aux';
 import Input from '../../../components/UI/Input/Input';
 import {connect} from 'react-redux';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+
+import * as actionCreators from '../../../store/actions/index';
 
 class ContactData extends Component {
 
@@ -100,9 +103,6 @@ class ContactData extends Component {
     event.preventDefault();
     console.log(this.props.ingredients);
 
-    this.setState({
-      loading: true
-    });
     const formData = {};
     for (let formElementId in this.state.orderForm) {
       formData[formElementId] = this.state.orderForm[formElementId].value;
@@ -114,23 +114,7 @@ class ContactData extends Component {
       orderData: formData
     };
 
-    //simulate latency with setTimeout
-    // setTimeout(() => {
-    axios.post('/orders.json', order)
-    .then(response => {
-      console.log(response);
-      this.props.history.push('/');
-      this.setState({
-        loading: false
-      });
-    }).catch(error => {
-      console.log(error);
-      this.props.history.push('/');
-      this.setState({
-        loading: false
-      });
-    });
-    // }, 2000);
+    this.props.onOrderSubmit(order);
   };
 
   checkValidity(value, rules) {
@@ -216,6 +200,12 @@ const mapStateToProps = state => {
     ingredients: state.ingredients,
     price: state.totalPrice
   }
-}
+};
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = dispatch => {
+  return {
+    onOrderSubmit: (orderData) => dispatch(actionCreators.purchaseBurgerStart(orderData))
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));

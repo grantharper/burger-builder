@@ -37,7 +37,8 @@ class Auth extends Component {
         valid: false,
         touched: false
       },
-    }
+    },
+    isSignUp: true
   };
 
   checkValidity(value, rules) {
@@ -57,7 +58,7 @@ class Auth extends Component {
     return isValid;
   }
 
-  inputChangedHandler(event, formElementId){
+  inputChangedHandler(event, formElementId) {
     const updatedControls = {
       ...this.state.controls
     };
@@ -78,8 +79,19 @@ class Auth extends Component {
 
   submitHandler = (event) => {
     event.preventDefault();
-    this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value);
-  }
+    if (this.state.isSignUp) {
+      this.props.onAuthSignUp(this.state.controls.email.value, this.state.controls.password.value);
+    } else {
+      this.props.onAuthSignIn(this.state.controls.email.value, this.state.controls.password.value);
+    }
+  };
+
+  toggleSignUpSignIn = (event) => {
+    event.preventDefault();
+    this.setState((prevState) => (
+    {isSignUp: !prevState.isSignUp}
+    ));
+  };
 
   render() {
 
@@ -108,7 +120,13 @@ class Auth extends Component {
     <div className={classes.Auth}>
       <form onSubmit={this.submitHandler}>
         {inputElements}
-        <Button btnType="Success" disabled={!this.state.formIsValid}>Submit</Button>
+        <div>
+          <Button btnType="Success">SUBMIT</Button>
+        </div>
+        <div>
+          <Button btnType="Danger" clicked={this.toggleSignUpSignIn}>SWITCH
+            TO {this.state.isSignUp ? 'SIGN IN' : 'SIGN UP'}</Button>
+        </div>
       </form>
     </div>
     );
@@ -117,7 +135,8 @@ class Auth extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAuth: (email, password) => dispatch(actionCreators.auth(email, password))
+    onAuthSignUp: (email, password) => dispatch(actionCreators.authSignUp(email, password)),
+    onAuthSignIn: (email, password) => dispatch(actionCreators.authSignIn(email, password))
   }
 };
 

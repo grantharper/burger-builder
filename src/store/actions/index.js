@@ -11,5 +11,6 @@ export {
 } from './order';
 
 export {
-  auth
+  authSignUp,
+  authSignIn
 } from './auth';

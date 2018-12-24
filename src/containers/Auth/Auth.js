@@ -6,7 +6,6 @@ import classes from './Auth.css';
 import * as actionCreators from '../../store/actions/index';
 import Spinner from "../../components/UI/Spinner/Spinner";
 
-
 class Auth extends Component {
 
   state = {
@@ -116,11 +115,19 @@ class Auth extends Component {
       value={element.value}/>);
     }
 
+    let errorMessage = null;
+
+    if(this.props.error){
+      errorMessage = (
+      <p>{this.props.error.response.data.error.message}</p>
+      );
+    }
 
     let display = (
     <div className={classes.Auth}>
       <form onSubmit={this.submitHandler}>
         {inputElements}
+        {errorMessage}
         <div>
           <Button btnType="Success">SUBMIT</Button>
         </div>
@@ -149,7 +156,8 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return {
-    loading: state.auth.loading
+    loading: state.auth.loading,
+    error: state.auth.error
   }
 };
 

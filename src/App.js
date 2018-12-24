@@ -9,6 +9,7 @@ import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
 import thunk from 'redux-thunk';
 import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import orderReducer from './store/reducers/order';
+import Auth from './containers/Auth/Auth';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -32,6 +33,7 @@ class App extends Component {
             <Switch>
               <Route path="/checkout" component={Checkout}/>
               <Route path="/orders" component={Orders}/>
+              <Route path="/auth" component={Auth} />
               <Route path="/" component={BurgerBuilder}/>
             </Switch>
           </Layout>

@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import {updateObject} from "../utility";
 
 const initialState = {
   ingredients: null,
@@ -25,37 +26,25 @@ function calculateTotalPrice(ingredients) {
 const burgerBuilder = (state = initialState, action) => {
 
   let updatedState = {...state};
+  let updatedIngredient = {};
+  let updatedIngredients = {};
 
   switch (action.type) {
     case actionTypes.ADD_INGREDIENT:
-      updatedState = {
-        ...state,
-        ingredients: {
-          ...state.ingredients,
-          [action.ingredientType]: state.ingredients[action.ingredientType] + 1
-        },
-      };
+      updatedIngredient = {[action.ingredientType]: state.ingredients[action.ingredientType] + 1};
+      updatedIngredients = {ingredients: updateObject(state.ingredients, updatedIngredient)};
+      updatedState = updateObject(state, updatedIngredients);
       break;
     case actionTypes.REMOVE_INGREDIENT:
-      updatedState = {
-        ...state,
-        ingredients: {
-          ...state.ingredients,
-          [action.ingredientType]: state.ingredients[action.ingredientType] - 1
-        }
-      };
+      updatedIngredient = {[action.ingredientType]: state.ingredients[action.ingredientType] - 1};
+      updatedIngredients = {ingredients: updateObject(state.ingredients, updatedIngredient)};
+      updatedState = updateObject(state, updatedIngredients);
       break;
     case actionTypes.SET_INGREDIENTS:
-      updatedState = {
-        ...state,
-        ingredients: action.ingredients
-      };
+      updatedState = updateObject(state, {ingredients: action.ingredients});
       break;
     case actionTypes.FETCH_INGREDIENTS_FAILED:
-      updatedState = {
-        ...state,
-        error: true
-      };
+      updatedState = updateObject(state, {error: true});
       break;
     default:
   }

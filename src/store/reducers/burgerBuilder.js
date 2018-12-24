@@ -23,22 +23,28 @@ function calculateTotalPrice(ingredients) {
   return totalPrice;
 }
 
+const addIngredient = (state, action) => {
+  const updatedIngredient = {[action.ingredientType]: state.ingredients[action.ingredientType] + 1};
+  const updatedIngredients = {ingredients: updateObject(state.ingredients, updatedIngredient)};
+  return updateObject(state, updatedIngredients);
+};
+
+const removeIngredient = (state, action) => {
+  const updatedIngredient = {[action.ingredientType]: state.ingredients[action.ingredientType] - 1};
+  const updatedIngredients = {ingredients: updateObject(state.ingredients, updatedIngredient)};
+  return updateObject(state, updatedIngredients);
+};
+
 const burgerBuilder = (state = initialState, action) => {
 
   let updatedState = {...state};
-  let updatedIngredient = {};
-  let updatedIngredients = {};
 
   switch (action.type) {
     case actionTypes.ADD_INGREDIENT:
-      updatedIngredient = {[action.ingredientType]: state.ingredients[action.ingredientType] + 1};
-      updatedIngredients = {ingredients: updateObject(state.ingredients, updatedIngredient)};
-      updatedState = updateObject(state, updatedIngredients);
+      updatedState = addIngredient(state, action);
       break;
     case actionTypes.REMOVE_INGREDIENT:
-      updatedIngredient = {[action.ingredientType]: state.ingredients[action.ingredientType] - 1};
-      updatedIngredients = {ingredients: updateObject(state.ingredients, updatedIngredient)};
-      updatedState = updateObject(state, updatedIngredients);
+      updatedState = removeIngredient(state, action);
       break;
     case actionTypes.SET_INGREDIENTS:
       updatedState = updateObject(state, {ingredients: action.ingredients});

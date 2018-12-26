@@ -54,11 +54,27 @@ export const authSignIn = (email, password) => {
     })
     .then(response => {
       console.log(response);
+      dispatch(logoutAfterExpireTime(response.data.expiresIn));
       dispatch(authSuccess(response.data));
     })
     .catch(error => {
       console.log(error);
       dispatch(authFail(error.response.data.error));
     });
+  }
+};
+
+export const authLogout = () => {
+  console.log('logging the user out');
+  return {
+    type: actionTypes.AUTH_LOGOUT
+  }
+};
+
+export const logoutAfterExpireTime = (expireSeconds) => {
+  return dispatch => {
+    setTimeout(() => {
+      dispatch(authLogout());
+      },1000 * expireSeconds);
   }
 };

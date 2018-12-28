@@ -5,6 +5,7 @@ import Button from '../../components/UI/Button/Button';
 import classes from './Auth.css';
 import * as actionCreators from '../../store/actions/index';
 import Spinner from "../../components/UI/Spinner/Spinner";
+import {Redirect} from "react-router-dom";
 
 class Auth extends Component {
 
@@ -143,6 +144,10 @@ class Auth extends Component {
       display = <Spinner/>;
     }
 
+    if(this.props.isAuthenticated){
+      display = <Redirect to="/"/>;
+    }
+
     return display;
   }
 }
@@ -157,7 +162,8 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
-    error: state.auth.error
+    error: state.auth.error,
+    isAuthenticated: state.auth.token !== null
   }
 };
 

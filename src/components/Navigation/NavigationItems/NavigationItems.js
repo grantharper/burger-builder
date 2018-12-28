@@ -13,7 +13,7 @@ const navigationItems = (props) => {
   return (
   <ul className={classes.NavigationItems}>
     <NavigationItem link="/" active>Burger Builder</NavigationItem>
-    <NavigationItem link="/orders">Orders</NavigationItem>
+    {props.isAuthenticated ? <NavigationItem link="/orders">Orders</NavigationItem> : null}
     {authNav}
   </ul>)
 };

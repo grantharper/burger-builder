@@ -113,7 +113,10 @@ class ContactData extends Component {
       orderData: formData
     };
 
+    this.props.onIngredientsInit();
+    console.log('[ContactData] orderHandler init ingredients');
     this.props.onOrderSubmit(order, this.props.token);
+    console.log('[ContactData] orderHandler submitted order');
   };
 
   checkValidity(value, rules) {
@@ -205,7 +208,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onOrderSubmit: (orderData, token) => dispatch(actionCreators.purchaseBurger(orderData, token))
+    onOrderSubmit: (orderData, token) => dispatch(actionCreators.purchaseBurger(orderData, token)),
+    onIngredientsInit: () => dispatch(actionCreators.initIngredients())
   }
 };
 

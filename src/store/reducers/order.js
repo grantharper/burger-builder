@@ -19,7 +19,7 @@ const order = (state = initialState, action) => {
     case actionTypes.PURCHASE_BURGER_START:
       return updateObject(state, {loading: true});
     case actionTypes.PURCHASE_INIT:
-      return updateObject(state, {loading: false});
+      return updateObject(state, {loading: false, purchased: false});
     case actionTypes.FETCH_ORDERS_START:
       return updateObject(state, {loading: true});
     case actionTypes.FETCH_ORDERS_SUCCESS:

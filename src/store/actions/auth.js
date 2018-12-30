@@ -1,8 +1,7 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-auth';
 import * as authConstants from '../../auth-constants'
-import {LOCAL_STORAGE_EXPIRE_DATE_KEY} from "../../auth-constants";
-import {LOCAL_STORAGE_TOKEN_KEY} from "../../auth-constants";
+import {LOCAL_STORAGE_EXPIRE_DATE_KEY, LOCAL_STORAGE_TOKEN_KEY, LOCAL_STORAGE_USER_ID_KEY} from "../../auth-constants";
 
 export const authStart = () => {
   return {
@@ -38,6 +37,7 @@ const genericAuth = (email, password, endpoint) => {
       const expireDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
       localStorage.setItem(authConstants.LOCAL_STORAGE_TOKEN_KEY, response.data.idToken);
       localStorage.setItem(authConstants.LOCAL_STORAGE_EXPIRE_DATE_KEY, expireDate.toString());
+      localStorage.setItem(authConstants.LOCAL_STORAGE_USER_ID_KEY, response.data.localId);
       dispatch(logoutAfterExpireTime(response.data.expiresIn));
       dispatch(authSuccess(response.data));
     })
@@ -60,6 +60,7 @@ export const authLogout = () => {
   console.log('logging the user out');
   localStorage.removeItem(authConstants.LOCAL_STORAGE_TOKEN_KEY);
   localStorage.removeItem(authConstants.LOCAL_STORAGE_EXPIRE_DATE_KEY);
+  localStorage.removeItem(authConstants.LOCAL_STORAGE_USER_ID_KEY);
   return {
     type: actionTypes.AUTH_LOGOUT
   }
@@ -83,10 +84,11 @@ export const authCheckState = () => {
       console.log('checking local storage for auth state');
       const expireDate = new Date(localStorage.getItem(LOCAL_STORAGE_EXPIRE_DATE_KEY));
       console.log('local storage expireDate=' + expireDate);
+      const userId = localStorage.getItem(LOCAL_STORAGE_USER_ID_KEY);
       if(new Date().getTime() < expireDate){
         dispatch(logoutAfterExpireTime(expireDate.getTime() - new Date().getTime()));
         dispatch(authSuccess({
-          localId: 'REPLACE ME',
+          localId: userId,
           idToken: token
         }));
       }

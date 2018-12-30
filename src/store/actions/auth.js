@@ -23,37 +23,19 @@ export const authFail = (error) => {
   }
 };
 
-export const authSignUp = (email, password) => {
+const genericAuth = (email, password, endpoint) => {
   return dispatch => {
     dispatch(authStart());
-    console.log('call sign up endpoint');
-    axios.post('/signupNewUser?key=' + API_KEY, {
+    axios.post(endpoint + '?key=' + API_KEY, {
       email: email,
       password: password,
       returnSecureToken: true
     })
     .then(response => {
       console.log(response);
-      dispatch(authSuccess(response.data));
-    })
-    .catch(error => {
-      console.log(error);
-      dispatch(authFail(error));
-    });
-  }
-};
-
-export const authSignIn = (email, password) => {
-  return dispatch => {
-    dispatch(authStart());
-    console.log('call authentication endpoint');
-    axios.post('/verifyPassword?key=' + API_KEY, {
-      email: email,
-      password: password,
-      returnSecureToken: true
-    })
-    .then(response => {
-      console.log(response);
+      const expireDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+      localStorage.setItem('token', response.data.idToken);
+      localStorage.setItem('expireDate', expireDate);
       dispatch(logoutAfterExpireTime(response.data.expiresIn));
       dispatch(authSuccess(response.data));
     })
@@ -62,6 +44,14 @@ export const authSignIn = (email, password) => {
       dispatch(authFail(error.response.data.error));
     });
   }
+};
+
+export const authSignUp = (email, password) => {
+  return genericAuth(email, password,'/signupNewUser');
+};
+
+export const authSignIn = (email, password) => {
+  return genericAuth(email, password,'/verifyPassword');
 };
 
 export const authLogout = () => {

@@ -19,15 +19,15 @@ class App extends Component {
   render() {
 
     let authRoutes = Array.of(
-      <Route path="/checkout" component={Checkout}/>,
-      <Route path="/orders" component={Orders}/>,
-      <Route path="/logout" component={Logout}/>
+      <Route key="/orders" path="/checkout" component={Checkout}/>,
+      <Route key="/orders" path="/orders" component={Orders}/>,
+      <Route key="/logout" path="/logout" component={Logout}/>
     );
 
     let publicRoutes = Array.of(
-      <Route path="/auth" component={Auth}/>,
-      <Route path="/" exact component={BurgerBuilder}/>,
-      <Redirect to="/" />
+      <Route key="/auth" path="/auth" component={Auth}/>,
+      <Route key="/" path="/" exact component={BurgerBuilder}/>,
+      <Redirect key="redirect" to="/" />
     );
 
     return (

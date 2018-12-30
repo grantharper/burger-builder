@@ -86,7 +86,7 @@ export const authCheckState = () => {
       console.log('local storage expireDate=' + expireDate);
       const userId = localStorage.getItem(LOCAL_STORAGE_USER_ID_KEY);
       if(new Date().getTime() < expireDate){
-        dispatch(logoutAfterExpireTime(expireDate.getTime() - new Date().getTime()));
+        dispatch(logoutAfterExpireTime(expireDate.getSeconds() - new Date().getSeconds()));
         dispatch(authSuccess({
           localId: userId,
           idToken: token

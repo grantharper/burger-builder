@@ -3,7 +3,7 @@ import Layout from './containers/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import Checkout from './containers/Checkout/Checkout';
 import Orders from './containers/Orders/Orders';
-import {Switch, Route, withRouter} from 'react-router-dom';
+import {Switch, Route, withRouter, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 import Auth from './containers/Auth/Auth';
 import Logout from "./containers/Auth/Logout/Logout";
@@ -17,18 +17,27 @@ class App extends Component {
   }
 
   render() {
+
+    let authRoutes = Array.of(
+      <Route path="/checkout" component={Checkout}/>,
+      <Route path="/orders" component={Orders}/>,
+      <Route path="/logout" component={Logout}/>
+    );
+
+    let publicRoutes = Array.of(
+      <Route path="/auth" component={Auth}/>,
+      <Route path="/" exact component={BurgerBuilder}/>,
+      <Redirect to="/" />
+    );
+
     return (
-    <div>
-      <Layout>
-        <Switch>
-          <Route path="/checkout" component={Checkout}/>
-          <Route path="/orders" component={Orders}/>
-          <Route path="/auth" component={Auth}/>
-          <Route path="/logout" component={Logout}/>
-          <Route path="/" component={BurgerBuilder}/>
-        </Switch>
-      </Layout>
-    </div>
+      <div>
+        <Layout>
+          <Switch>
+            {this.props.isAuthenticated ? authRoutes.concat(publicRoutes): publicRoutes}
+          </Switch>
+        </Layout>
+      </div>
     );
   }
 }
@@ -36,7 +45,13 @@ class App extends Component {
 const mapDispatchToProps = dispatch => {
   return {
     checkAuth: () => dispatch(actionCreators.authCheckState())
+  };
+};
+
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.token !== null
   }
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

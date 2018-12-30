@@ -1,6 +1,8 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-auth';
-import {API_KEY} from '../../auth-constants'
+import * as authConstants from '../../auth-constants'
+import {LOCAL_STORAGE_EXPIRE_DATE_KEY} from "../../auth-constants";
+import {LOCAL_STORAGE_TOKEN_KEY} from "../../auth-constants";
 
 export const authStart = () => {
   return {
@@ -26,7 +28,7 @@ export const authFail = (error) => {
 const genericAuth = (email, password, endpoint) => {
   return dispatch => {
     dispatch(authStart());
-    axios.post(endpoint + '?key=' + API_KEY, {
+    axios.post(endpoint + '?key=' + authConstants.API_KEY, {
       email: email,
       password: password,
       returnSecureToken: true
@@ -34,8 +36,8 @@ const genericAuth = (email, password, endpoint) => {
     .then(response => {
       console.log(response);
       const expireDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
-      localStorage.setItem('token', response.data.idToken);
-      localStorage.setItem('expireDate', expireDate);
+      localStorage.setItem(authConstants.LOCAL_STORAGE_TOKEN_KEY, response.data.idToken);
+      localStorage.setItem(authConstants.LOCAL_STORAGE_EXPIRE_DATE_KEY, expireDate.toString());
       dispatch(logoutAfterExpireTime(response.data.expiresIn));
       dispatch(authSuccess(response.data));
     })
@@ -56,6 +58,8 @@ export const authSignIn = (email, password) => {
 
 export const authLogout = () => {
   console.log('logging the user out');
+  localStorage.removeItem(authConstants.LOCAL_STORAGE_TOKEN_KEY);
+  localStorage.removeItem(authConstants.LOCAL_STORAGE_EXPIRE_DATE_KEY);
   return {
     type: actionTypes.AUTH_LOGOUT
   }
@@ -66,5 +70,26 @@ export const logoutAfterExpireTime = (expireSeconds) => {
     setTimeout(() => {
       dispatch(authLogout());
       },1000 * expireSeconds);
+  }
+};
+
+export const authCheckState = () => {
+  return dispatch => {
+    const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
+    if(!token) {
+      dispatch(authLogout());
+    }else{
+
+      console.log('checking local storage for auth state');
+      const expireDate = new Date(localStorage.getItem(LOCAL_STORAGE_EXPIRE_DATE_KEY));
+      console.log('local storage expireDate=' + expireDate);
+      if(new Date().getTime() < expireDate){
+        dispatch(logoutAfterExpireTime(expireDate.getTime() - new Date().getTime()));
+        dispatch(authSuccess({
+          localId: 'REPLACE ME',
+          idToken: token
+        }));
+      }
+    }
   }
 };

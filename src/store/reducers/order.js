@@ -12,8 +12,7 @@ const order = (state = initialState, action) => {
   switch (action.type) {
 
     case actionTypes.PURCHASE_BURGER_SUCCESS:
-      const newOrder = updateObject(action.orderData, {id: action.orderId});
-      return updateObject(state, {loading: false, purchased: true, orders: state.orders.concat(newOrder)});
+      return updateObject(state, {loading: false, purchased: true});
     case actionTypes.PURCHASE_BURGER_FAIL:
       return updateObject(state, {loading: false});
     case actionTypes.PURCHASE_BURGER_START:

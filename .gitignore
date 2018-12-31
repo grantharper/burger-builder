@@ -24,3 +24,6 @@ yarn-error.log*
 
 *.iml
 .idea/*
+
+# app specific
+src/auth-constants.js

@@ -121,5 +121,6 @@
     "presets": [
       "react-app"
     ]
-  }
+  },
+  "homepage": "https://grantharper.org/burger"
 }

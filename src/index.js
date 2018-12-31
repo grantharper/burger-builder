@@ -25,7 +25,7 @@ applyMiddleware(thunk)
 
 ReactDOM.render(
 <Provider store={store}>
-  <BrowserRouter>
+  <BrowserRouter basename={'/burger'}>
     <App/>
   </BrowserRouter>
 </Provider>,

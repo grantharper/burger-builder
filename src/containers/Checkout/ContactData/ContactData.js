@@ -4,7 +4,6 @@ import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import classes from './ContactData.css';
 import axios from '../../../axios-orders';
-import Aux from '../../../hoc/Aux/Aux';
 import Input from '../../../components/UI/Input/Input';
 import {connect} from 'react-redux';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
@@ -177,13 +176,13 @@ class ContactData extends Component {
 
 
     let displayOutput = (
-    <Aux>
+    <React.Fragment>
       <h4>Enter your contact data</h4>
       <form onSubmit={this.orderHandler}>
         {inputElements}
         <Button btnType="Success" disabled={!this.state.formIsValid}>Order</Button>
       </form>
-    </Aux>
+    </React.Fragment>
 
     );
     if (this.props.loading) {
